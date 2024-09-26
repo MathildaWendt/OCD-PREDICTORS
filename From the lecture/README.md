@@ -8,7 +8,7 @@ _Note that this file is written in **MarkDown** language. A reference is availab
 
 Include the name, logo and images refering to your project
 
-![Your dashboard](./assets/example-image.jpg)
+![Your dashboard](./assets/OCD.jpeg)
 
 ## Introduction
 
