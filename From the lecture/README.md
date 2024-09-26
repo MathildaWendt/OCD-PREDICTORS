@@ -1,6 +1,6 @@
 # PROHI Dashboard Example
 
-# [Name of the project]
+# [OCD SEVERITY PREDICTOR]
 
 _You can modify this README file with all the information that your team consider relevant for a technical audience who would like to understand your project or to run it in the future._
 
@@ -8,7 +8,7 @@ _Note that this file is written in **MarkDown** language. A reference is availab
 
 Include the name, logo and images refering to your project
 
-![Your dashboard](./assets/example-image.jpg)
+![Your dashboard](./assets/OCD.jpeg.jpg)
 
 ## Introduction
 
