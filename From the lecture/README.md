@@ -7,6 +7,9 @@ _You can modify this README file with all the information that your team conside
 _Note that this file is written in **MarkDown** language. A reference is available here: <https://www.markdownguide.org/basic-syntax/>_
 
 Include the name, logo and images refering to your project
+import os
+path_to_image = os.path.join(os.path.dirname(__file__), 'assets', 'OCD.jpeg')
+
 
 ![OCD SEVERITY PREDICTOR](./assets/OCD.jpeg)
 
