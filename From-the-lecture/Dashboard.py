@@ -27,7 +27,7 @@ with st.form(key='patient_info_form'):
     depression = st.selectbox("Does Patient have depression?", options=["Yes", "No"])  # Depression status
     anxiety = st.selectbox("Does Patient have anxiety?", options=["Yes", "No"])  # Anxiety status
     age = st.number_input("Age", min_value=0, max_value=120, value=25)  # Default age
-    diagnosis_date = st.date_input("Date of Diagnosis")
+    
 
     submit_button = st.form_submit_button(label='Submit')
 
@@ -38,7 +38,7 @@ if submit_button:
     st.write(f"**Depression:** {depression}")
     st.write(f"**Anxiety:** {anxiety}")
     st.write(f"**Age:** {age}")
-    st.write(f"**Date of Diagnosis:** {diagnosis_date}")
+  
 
 
 
