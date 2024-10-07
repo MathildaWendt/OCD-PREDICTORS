@@ -19,19 +19,26 @@ st.markdown(
 # Input Form for user details
 st.markdown("<h2 style='color: turquoise;'>Patient Form</h2>", unsafe_allow_html=True)
 
+
 with st.form(key='patient_info_form'):
+    # New input fields
+    gender = st.selectbox("Gender", options=["Male", "Female", "Other"])  # Gender selection
+    family_history = st.selectbox("Family History of OCD?", options=["Yes", "No"])  # Family history
+    depression = st.selectbox("Does Patient have depression?", options=["Yes", "No"])  # Depression status
+    anxiety = st.selectbox("Does Patient have anxiety?", options=["Yes", "No"])  # Anxiety status
     age = st.number_input("Age", min_value=0, max_value=120, value=25)  # Default age
-    anxiety = st.selectbox("Does Patient have anxiety?", options=["Yes", "No"])
     diagnosis_date = st.date_input("Date of Diagnosis")
 
     submit_button = st.form_submit_button(label='Submit')
 
 if submit_button:
     st.success("Information Submitted Successfully!")
-    st.write(f"**Age:** {age}")
+    st.write(f"**Gender:** {gender}")
+    st.write(f"**Family History of OCD:** {family_history}")
+    st.write(f"**Depression:** {depression}")
     st.write(f"**Anxiety:** {anxiety}")
+    st.write(f"**Age:** {age}")
     st.write(f"**Date of Diagnosis:** {diagnosis_date}")
-
 
 
 
