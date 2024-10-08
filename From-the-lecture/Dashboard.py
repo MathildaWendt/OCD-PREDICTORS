@@ -8,7 +8,7 @@ st.set_page_config(
 )
 
 # Sidebar configuration
-image_path = "./From-the-lecture/assets/OCD.jpeg"  # Adjust the path if needed
+image_path = ".//From-the-lecture/assets/OCD.jpeg"  # Adjust the path if needed
 
 # Check if the image exists
 if os.path.exists(image_path):
@@ -23,11 +23,9 @@ sidebar_option = st.sidebar.radio("Select an option", options=["About", "Predict
 if sidebar_option == "About":
     st.markdown("<h2 style='color: turquoise;'>About the Project</h2>", unsafe_allow_html=True)
     st.write("""
-    This project is designed to help predict the severity of Obsessive-Compulsive Disorder (OCD) symptoms in patients. 
-    It collects relevant information such as age, gender, family history, depression, and anxiety levels. 
-    Based on these inputs, the application predicts whether the symptoms are mild, moderate, or severe, and provides a visualization of high-severity symptoms. 
+    Description about the project 
 
-    **Future work** will include adding more comprehensive descriptive and diagnostic analytics tools to provide deeper insights into patient data trends and patterns.
+    **Future work**
     """)
 
 # Page for predicting new patients (renamed to "Predictor")
@@ -41,19 +39,21 @@ elif sidebar_option == "Predictor":
     st.markdown("<h2 style='color: turquoise;'>Patient Form</h2>", unsafe_allow_html=True)
 
     with st.form(key='patient_info_form'):
-        # New input fields
+        # Input fields
         gender = st.selectbox("Gender", options=["Male", "Female", "Other"])  # Gender selection
         family_history = st.selectbox("Family History of OCD?", options=["Yes", "No"])  # Family history
         depression = st.selectbox("Does Patient have depression?", options=["Yes", "No"])  # Depression status
         anxiety = st.selectbox("Does Patient have anxiety?", options=["Yes", "No"])  # Anxiety status
         age = st.number_input("Age", min_value=0, max_value=120, value=25)  # Default age
-        # New Obsession and Compulsive type options
+        # Obsession and Compulsive type options
         obsession_type = st.selectbox("Obsession Type", options=["Harm-related", "Contamination", "Religious", "Hoarding", "Symmetry", "Else", "None"])
         compulsive_type = st.selectbox("Compulsive Type", options=["Checking", "Washing", "Counting", "Ordering", "Praying", "Else", "None"])
-        symptom_duration_years = st.number_input("Duration of Symptoms (in whole years)", min_value=0, value=0, step=1, format="%d")  # Duration input in whole years
+        # Duration of symptoms in whole years (integer input)
+        symptom_duration_years = st.number_input("Duration of Symptoms (in years)", min_value=0, value=0, step=1, format="%d")  # Duration input in whole years
 
         submit_button = st.form_submit_button(label='Submit')
 
+    # Display results only after the form is submitted
     if submit_button:
         st.success("Information Submitted Successfully!")
         st.write(f"**Gender:** {gender}")
@@ -65,58 +65,64 @@ elif sidebar_option == "Predictor":
         st.write(f"**Compulsive Type:** {compulsive_type}")
         st.write(f"**Duration of Symptoms:** {symptom_duration_years} years")  # Display duration
 
-    # Predict severity
-    predicted_severity = "Severe Symptoms"  # Directly stating the predicted severity
-    st.markdown(f"### Predicted: **{predicted_severity}**")
+        # Simplified severity prediction logic: Low or High Symptoms
+        if symptom_duration_years < 1:  # Example condition for low symptoms
+            predicted_severity = "Low Symptoms"
+        else:
+            predicted_severity = "High Symptoms"
 
-    # Add a note about the type of symptoms (mostly compulsive)
-    st.markdown("""
-        #### Symptom Type: 
-        - **Mostly Compulsive Symptoms**  
-        (Compulsions are repetitive behaviors or mental acts that a person feels driven to perform.)
-    """)
+        st.markdown(f"### Predicted: **{predicted_severity}**")
 
-    # Optional: Add a description about what compulsive symptoms are
-    st.markdown("""
-    Compulsive symptoms often include actions like:
-    - Repeatedly checking if the door is locked
-    - Washing hands frequently
-    - Counting items
-    - Organizing things in a very specific order
-    """)
+        # If "High Symptoms", show additional details about compulsive symptoms
+        if predicted_severity == "High Symptoms":
+            # Add a note about the type of symptoms (mostly compulsive)
+            st.markdown("""
+                #### Symptom Type: 
+                - **Mostly Compulsive Symptoms**  
+                (Compulsions are repetitive behaviors or mental acts that a person feels driven to perform.)
+            """)
 
-    # Create and display an illustration of high symptoms
-    def plot_high_symptoms_illustration():
-        fig, ax = plt.subplots(figsize=(8, 4))
+            # Optional: Add a description about what compulsive symptoms are
+            st.markdown("""
+            Compulsive symptoms often include actions like:
+            - Repeatedly checking if the door is locked
+            - Washing hands frequently
+            - Counting items
+            - Organizing things in a very specific order
+            """)
 
-        # Set a gradient background
-        ax.set_facecolor('#f2f2f2')  # Light gray background
-        ax.set_xlim(0, 100)
+            # Create and display an illustration of high symptoms
+            def plot_high_symptoms_illustration():
+                fig, ax = plt.subplots(figsize=(8, 4))
 
-        # Draw a red bar for high severity
-        ax.barh(['High Severity'], [100], color='red', edgecolor='black', height=0.4)
+                # Set a gradient background
+                ax.set_facecolor('#f2f2f2')  # Light gray background
+                ax.set_xlim(0, 100)
 
-        # Adding a title and centered text
-        ax.set_title('High Severity Symptoms', fontsize=20, color='black', fontweight='bold', pad=20)
-        ax.text(50, 0, 'High Symptoms', ha='center', va='center', fontsize=16, color='white', fontweight='bold')
+                # Draw a red bar for high severity
+                ax.barh(['High Severity'], [100], color='red', edgecolor='black', height=0.4)
 
-        # Adding decorative elements
-        for spine in ax.spines.values():
-            spine.set_visible(False)  # Hide spines for cleaner look
+                # Adding a title and centered text
+                ax.set_title('High Severity Symptoms', fontsize=20, color='black', fontweight='bold', pad=20)
+                ax.text(50, 0, 'High Symptoms', ha='center', va='center', fontsize=16, color='white', fontweight='bold')
 
-        # Remove y-ticks and x-ticks
-        ax.set_xticks([])
-        ax.set_yticks([])
+                # Adding decorative elements
+                for spine in ax.spines.values():
+                    spine.set_visible(False)  # Hide spines for cleaner look
 
-        # Add a footer note
-        plt.figtext(0.5, -0.1, 'This indicates high severity of symptoms, requiring attention.', 
-                    wrap=True, horizontalalignment='center', fontsize=12, color='gray')
+                # Remove y-ticks and x-ticks
+                ax.set_xticks([])
+                ax.set_yticks([])
 
-        return fig
+                # Add a footer note
+                plt.figtext(0.5, -0.1, 'This indicates high severity of symptoms, requiring attention.', 
+                            wrap=True, horizontalalignment='center', fontsize=12, color='gray')
 
-    # Plot the high symptoms illustration and display it
-    high_symptoms_fig = plot_high_symptoms_illustration()
-    st.pyplot(high_symptoms_fig)
+                return fig
+
+            # Plot the high symptoms illustration and display it
+            high_symptoms_fig = plot_high_symptoms_illustration()
+            st.pyplot(high_symptoms_fig)
 
 # Placeholder for Descriptive Analytics
 elif sidebar_option == "Descriptive Analytics":
