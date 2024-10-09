@@ -120,9 +120,54 @@ elif sidebar_option == "Predictor":
 
                 return fig
 
+
+
             # Plot the high symptoms illustration and display it
             high_symptoms_fig = plot_high_symptoms_illustration()
             st.pyplot(high_symptoms_fig)
+        elif predicted_severity == "Low Symptoms":
+            # Add a note about the type of symptoms (mostly compulsive)
+            st.markdown("""
+                #### Symptom Type: 
+                - **Mostly Obsessive Symptoms**  
+            """)
+
+            # Optional: Add a description about what compulsive symptoms are
+            
+
+            # Create and display an illustration of loe symptoms
+            def plot_low_symptoms_illustration():
+                fig, ax = plt.subplots(figsize=(8, 4))
+
+                # Set a gradient background
+                ax.set_facecolor('#f2f2f2')  # Light gray background
+                ax.set_xlim(0, 100)
+
+                # Draw a red bar for high severity
+                ax.barh(['Low Severity'], [100], color='green', edgecolor='black', height=0.4)
+
+                # Adding a title and centered text
+                ax.set_title('Low Severity Symptoms', fontsize=20, color='black', fontweight='bold', pad=20)
+                ax.text(50, 0, 'Low Symptoms', ha='center', va='center', fontsize=16, color='white', fontweight='bold')
+
+                # Adding decorative elements
+                for spine in ax.spines.values():
+                    spine.set_visible(False)  # Hide spines for cleaner look
+
+                # Remove y-ticks and x-ticks
+                ax.set_xticks([])
+                ax.set_yticks([])
+
+                # Add a footer note
+                plt.figtext(0.5, -0.1, 'This indicates Low severity of symptoms, not priortitized attention.', 
+                            wrap=True, horizontalalignment='center', fontsize=12, color='gray')
+
+                return fig
+
+            # Plot the high symptoms illustration and display it
+            low_symptoms_fig = plot_low_symptoms_illustration()
+            st.pyplot(low_symptoms_fig)
+
 
 # Placeholder for Descriptive Analytics
 elif sidebar_option == "Descriptive Analytics":
