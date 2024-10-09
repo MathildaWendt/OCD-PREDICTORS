@@ -145,7 +145,7 @@ elif sidebar_option == "Descriptive Analytics":
     st.image(image1_path, caption="Analytics Image 1", use_column_width=True)
     st.image(image2_path, caption="Analytics Image 2", use_column_width=True)
     st.image(image3_path, caption="Analytics Image 3", use_column_width=True)
-     st.image(image4_path, caption="Analytics Image 4", use_column_width=True)
+    st.image(image4_path, caption="Analytics Image 4", use_column_width=True)
     st.image(image5_path, caption="Analytics Image 5", use_column_width=True)
     st.image(image6_path, caption="Analytics Image 6", use_column_width=True)
     st.image(image7_path, caption="Analytics Image 7", use_column_width=True)
