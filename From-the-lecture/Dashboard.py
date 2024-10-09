@@ -128,6 +128,33 @@ elif sidebar_option == "Predictor":
 elif sidebar_option == "Descriptive Analytics":
     st.markdown("<h2 style='color: turquoise;'>Descriptive Analytics</h2>", unsafe_allow_html=True)
     st.write("This section will be filled with descriptive analytics.")
+    
+
+    # Define the paths to the images
+    image1_path = ".//From-the-lecture/assets/1a.jpg"
+    image2_path = ".//From-the-lecture/assets/2a.jpg"
+    image3_path = ".//From-the-lecture/assets/3a.jpg"
+    image4_path = ".//From-the-lecture/assets/4a.jpg"
+    image5_path = ".//From-the-lecture/assets/5a.jpg"
+    image6_path = ".//From-the-lecture/assets/6a.jpg"
+    image7_path = ".//From-the-lecture/assets/7a.jpg"
+    image8_path = ".//From-the-lecture/assets/8a.jpg"
+    image9_path = ".//From-the-lecture/assets/9a.jpg"
+    image10_path = ".//From-the-lecture/assets/10a.jpg"
+   
+    st.image(image1_path, caption="Analytics Image 1", use_column_width=True)
+    st.image(image2_path, caption="Analytics Image 2", use_column_width=True)
+    st.image(image3_path, caption="Analytics Image 3", use_column_width=True)
+     st.image(image4_path, caption="Analytics Image 4", use_column_width=True)
+    st.image(image5_path, caption="Analytics Image 5", use_column_width=True)
+    st.image(image6_path, caption="Analytics Image 6", use_column_width=True)
+    st.image(image7_path, caption="Analytics Image 7", use_column_width=True)
+    st.image(image8_path, caption="Analytics Image 8", use_column_width=True)
+    st.image(image9_path, caption="Analytics Image 9", use_column_width=True)
+    st.image(image10_path, caption="Analytics Image 10", use_column_width=True)
+
+    
+   
 
 # Placeholder for Diagnostic Analytics
 elif sidebar_option == "Diagnostic Analytics":
