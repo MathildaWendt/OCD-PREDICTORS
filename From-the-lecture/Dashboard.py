@@ -68,8 +68,14 @@ The dataset includes the following features:
 """)
     st.markdown("<h2 style='color: turquoise;'>Contact Information</h2>", unsafe_allow_html=True)
     st.write("""
-
-sid.amjed87@gmail.com
+           
+1. amanda.b-14@hotmail.com
+2. mathilda.hedbeck@gmail.com            
+3. moaosterberg@gmail.com
+4. shwetaghaisas@gmail.com
+5. sid.amjed87@gmail.com
+6. dr.yehtut.1995@gmail.com
+             
 """)
     st.markdown("<h2 style='color: turquoise;'>Reference</h2>", unsafe_allow_html=True)
     st.write("""
