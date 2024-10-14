@@ -8,7 +8,7 @@ st.set_page_config(
 )
 
 # Sidebar configuration
-image_path = ".//From-the-lecture/assets/OCD.jpeg"  # Adjust the path if needed
+image_path = "./From-the-lecture/assets/OCD.jpeg"  # Adjust the path if needed
 
 # Check if the image exists
 if os.path.exists(image_path):
