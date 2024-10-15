@@ -229,9 +229,47 @@ elif sidebar_option == "Descriptive Analytics":
 
     # Loading the dataset 
     data = pd.read_csv('filtered_df.csv')
-    # Display total number of patients
-    num_patients = len(data)  
-    st.metric("Total Number of Patients from the dataset used", num_patients)
+    ####### Patients, age, female, male####
+
+    
+    average_age = round(data['Age'].mean())
+    num_patients = len(data)
+    num_males = data['Gender'].value_counts().get('Male', 0)
+    num_females = data['Gender'].value_counts().get('Female', 0)
+
+
+    col1, col2, col3, col4 = st.columns(4)
+
+
+    def create_stat_circle(value, label, emoji):
+       return f"""
+       <div style='display: flex; flex-direction: column; align-items: center;'>
+            <div style='border: 2px solid #D3D3D3; border-radius: 50%; width: 100px; height: 100px; display: flex; 
+                       align-items: center; justify-content: center; font-size: 24px; font-weight: bold; color: turquoise;'>
+                {value}
+            </div>
+            <p style='text-align: center; margin-top: 5px; font-size: 16px;'>{emoji} {label}</p>
+         </div>
+      """
+
+# patients
+    with col1:
+        st.markdown(create_stat_circle(num_patients, "Total Patients", "🧑‍🤝‍🧑"), unsafe_allow_html=True)
+
+# age
+    with col2:
+        st.markdown(create_stat_circle(round(average_age, 2), "Average Age", "🎂"), unsafe_allow_html=True)
+
+# men
+    with col3:
+        st.markdown(create_stat_circle(num_males, "Males", "👨"), unsafe_allow_html=True)
+
+# females
+    with col4:
+        st.markdown(create_stat_circle(num_females, "Females", "👩"), unsafe_allow_html=True)
+    
+
+
 
     ##
      # Age and Gender Distribution
