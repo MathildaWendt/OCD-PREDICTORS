@@ -2,6 +2,9 @@ import streamlit as st
 import matplotlib.pyplot as plt
 import os
 import numpy as np
+import pandas as pd
+import plotly.express as px
+import plotly.graph_objs as go
 
 st.set_page_config(
     page_title="OCD SEVERITY PREDICTOR"
@@ -229,6 +232,55 @@ elif sidebar_option == "Descriptive Analytics":
     # Display total number of patients
     num_patients = len(data)  
     st.metric("Total Number of Patients from the dataset used", num_patients)
+
+    ##
+     # Age and Gender Distribution
+    st.markdown("## Age and Gender Distribution")
+
+    # Creating age groups (bins)
+    data['Age Group'] = pd.cut(data['Age'], bins=[0, 18, 30, 50, 70, 100], 
+                                labels=['0-18', '19-30', '31-50', '51-70', '71+'])
+
+    # Count the number of males and females in each age group
+    gender_age_group = data.groupby(['Age Group', 'Gender']).size().unstack().fillna(0)
+
+    # Create a figure
+    fig0 = go.Figure()
+
+    # Add bar plot for males
+    fig0.add_trace(
+        go.Bar(
+            x=gender_age_group.index,
+            y=gender_age_group['Male'],
+            name='Male',
+            marker_color='blue'
+        )
+    )
+
+    # Add bar plot for females
+    fig0.add_trace(
+        go.Bar(
+            x=gender_age_group.index,
+            y=gender_age_group['Female'],
+            name='Female',
+            marker_color='pink'
+        )
+    )
+
+    # Update layout to create stacked bars
+    fig0.update_layout(
+        barmode='stack',  # Stacked bar mode
+        title='Number of People by Age Group and Gender',
+        xaxis_title='Age Group',
+        yaxis_title='Number of People',
+        legend_title='Gender',
+        xaxis_tickangle=0,
+        yaxis=dict(showgrid=True)
+    )
+
+    # Show the plot in Streamlit
+    st.plotly_chart(fig0)
+    ###########
     
 
     # Define the paths to the images
