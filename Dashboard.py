@@ -223,6 +223,12 @@ elif sidebar_option == "Predictor":
 elif sidebar_option == "Descriptive Analytics":
     st.markdown("<h2 style='color: turquoise;'>Descriptive Analytics</h2>", unsafe_allow_html=True)
     st.write("This section will be filled with descriptive analytics.")
+
+    # Loading the dataset 
+    data = pd.read_csv('filtered_df.csv')
+    # Display total number of patients
+    num_patients = len(data)  
+    st.metric("Total Number of Patients from the dataset used", num_patients)
     
 
     # Define the paths to the images
