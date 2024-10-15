@@ -29,12 +29,7 @@ if sidebar_option == "About":
     st.markdown("<h2 style='color: turquoise;'>About the Dataset</h2>", unsafe_allow_html=True)
     st.write("""
 
-The dataset contains clinical information about individuals diagnosed with OCD. There were initially 17 features and 1500 patients but there were instances in the dataset that had total score above 40, and individual scores for Obsessions and Compulsions above 20 each, which is not acceptable based on the scoring system of the scale. Hence, we have eliminated those and a total of 412 patients were used in creating this prediction model. 
-
-The scores for obsession and compulsion range from 0-20 each, and the total score ranges from 0-40. The dataset did not have the total score calculated which we have done by adding the scores for Y-BOCS Score (Obsessions) and Y-BOCS Score (Compulsions). The total score is categorized as:
-
-0-20: Low , 
-21-40: High. 
+The dataset (2) contains clinical information about individuals diagnosed with OCD. There were initially 17 features and 1500 patients but there were instances in the dataset that had total score above 40, and individual scores for Obsessions and Compulsions above 20 each, which is not acceptable based on the scoring system of the scale. Hence, we have eliminated those and a total of 419 patients were used in creating this prediction model. 
              
 The dataset includes the following features:
 
@@ -55,6 +50,13 @@ The dataset includes the following features:
 15.	Depression Diagnosis: Whether the patient has a comorbid diagnosis of depression.
 16.	Anxiety Diagnosis: Whether the patient has a comorbid diagnosis of anxiety.
 17.	Medications: Medications currently prescribed to the patient for managing OCD or related conditions.
+
+We were interested in predicting the severity of OCD given by "Total_Score", therefore we combined features 13 and 14. Based on a literature review found that age, duration of symptoms, family history of OCD, and diagnosis of Anxiety or Depression affect it. Gender being a basic demographic feature has been retained though research does not clearly indicate its influence on OCD. Obsession Type and Compulsion Type are a reflection of patient's symptoms which may affect severity of the disorder, and therefore have been retained (3,4,5,6,7). 
+
+The scores for obsession and compulsion range from 0-20 each, and the total score ranges from 0-40. The dataset did not have the total score calculated which we have done by adding the scores for Y-BOCS Score (Obsessions) and Y-BOCS Score (Compulsions). The total score is categorized as:
+
+0-20: Low , 
+21-40: High.
 """)
     st.markdown("<h2 style='color: turquoise;'>Group Members</h2>", unsafe_allow_html=True)
     st.write("""
@@ -81,6 +83,12 @@ The dataset includes the following features:
     st.write("""
 
 1.	Bejerot S, Edman G, Anckarsäter H, Berglund G, Gillberg C, Hofvander B, et al. The Brief Obsessive-Compulsive Scale (BOCS): a self-report scale for OCD and obsessive-compulsive related disorders. Nord J Psychiatry. 2014 Nov;68(8):549-59. doi: 10.3109/08039488.2014.884631.
+2. Haque O, Alamgir Z. OCD Patient Dataset: Demographics and Clinical Data [Internet].2023 [cited 2024-09-08]. Available from: https://www.kaggle.com/datasets/ohinhaque/ocd-patient-dataset-demographics-and-clinical-data/data
+3. Mathes BM, Morabito DM, Schmidt NB. Epidemiological and Clinical Gender Differences in OCD. Curr Psychiatry Rep. 2019 Apr 23;21(5):36. doi: 10.1007/s11920-019-1015-2.
+4. Riddle DB, Guzick A, Minhajuddin A, Smárason O, Armstrong GM, Slater H, et al. Obsessive-compulsive disorder in youth and young adults with depression: Clinical characteristics of comorbid presentations. J Obsessive Compuls Relat Disord. 2023 Jul;38:100820. doi: 10.1016/j.jocrd.2023.100820. 
+5. Zheng H, Zhang Z, Huang C, Luo G. Medical status of outpatients with obsessive-compulsive disorder in psychiatric department and its influencing factors. Zhong Nan Da Xue Xue Bao Yi Xue Ban. 2022 Oct 28;47(10):1418-1424. English, Chinese. doi: 10.11817/j.issn.1672-7347.2022.220125. 
+6. Mahjani B, Bey K, Boberg J, Burton C. Genetics of obsessive-compulsive disorder. Psychol Med. 2021 Oct;51(13):2247-2259. doi: 10.1017/S0033291721001744. Epub 2021 May 25. PMID: 34030745; PMCID: PMC8477226.
+7. Mathes BM, Morabito DM, Schmidt NB. Epidemiological and Clinical Gender Differences in OCD. Curr Psychiatry Rep. 2019 Apr 23;21(5):36. doi: 10.1007/s11920-019-1015-2. PMID: 31016410.
 
     """)
 
