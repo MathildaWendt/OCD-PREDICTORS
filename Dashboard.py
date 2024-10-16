@@ -286,61 +286,10 @@ elif sidebar_option == "Descriptive Analytics":
     with col4:
         st.markdown(create_stat_circle(num_females, "Females", "👩"), unsafe_allow_html=True)
     
-
-
-
-    ##
-     # Age and Gender Distribution
-    st.markdown("## Age and Gender Distribution")
-
-    # Creating age groups (bins)
-    data['Age Group'] = pd.cut(data['Age'], bins=[0, 18, 30, 50, 70, 100], 
-                                labels=['0-18', '19-30', '31-50', '51-70', '71+'])
-
-    # Count the number of males and females in each age group
-    gender_age_group = data.groupby(['Age Group', 'Gender']).size().unstack().fillna(0)
-
-    # Create a figure
-    fig0 = go.Figure()
-
-    # Add bar plot for males
-    fig0.add_trace(
-        go.Bar(
-            x=gender_age_group.index,
-            y=gender_age_group['Male'],
-            name='Male',
-            marker_color='#ADD8E6'
-        )
-    )
-
-    # Add bar plot for females
-    fig0.add_trace(
-        go.Bar(
-            x=gender_age_group.index,
-            y=gender_age_group['Female'],
-            name='Female',
-            marker_color='#FFB6C1'
-        )
-    )
-
-    # Update layout to create stacked bars
-    fig0.update_layout(
-        barmode='stack',  # Stacked bar mode
-        title='Number of People by Age Group and Gender',
-        xaxis_title='Age Group',
-        yaxis_title='Number of People',
-        legend_title='Gender',
-        xaxis_tickangle=0,
-        yaxis=dict(showgrid=True)
-    )
-
-    # Show the plot in Streamlit
-    st.plotly_chart(fig0)
-    ###########
     
 #########################################################################################3
 
-    st.markdown("<h2> Other Diagnosis in Relation to Total Score</h2>", unsafe_allow_html=True)
+    st.markdown("<h2> Family History of OCD in Relation to Total Score</h2>", unsafe_allow_html=True)
 
 # Filters
     st.markdown("<h4>Select Filters below</h4>", unsafe_allow_html=True)
@@ -395,7 +344,7 @@ elif sidebar_option == "Descriptive Analytics":
             y=family_history_counts.values, 
             name='Number of People',
             yaxis='y1',
-            marker_color='lightblue'
+            marker_color='#AFEEEE'
         )
 
     # Create a box plot for the distribution of Total_Score for each category
@@ -404,7 +353,7 @@ elif sidebar_option == "Descriptive Analytics":
             y=filtered_data['Total_Score'], 
             name='Distribution of Total Score',
             yaxis='y2',
-            marker_color='orange'
+            marker_color='#9370DB'
         )
 
     # Combine the bar and box plot using secondary y-axes
@@ -412,8 +361,8 @@ elif sidebar_option == "Descriptive Analytics":
 
     # Update layout for dual y-axes
         fig4.update_layout(
-            title='Number of People with other Diagnosis in relation to the Total Score',
-            xaxis_title='Other Diagnosis',
+            title='Number of People with Family History of OCD in relation to the Total Score',
+            xaxis_title='Family History of OCD',
             yaxis=dict(
                 title='Number of People',
                 showgrid=False
@@ -429,9 +378,56 @@ elif sidebar_option == "Descriptive Analytics":
     # Show the figure
         st.plotly_chart(fig4)
 
+   ##
+     # Age and Gender Distribution
+    st.markdown("## Age and Gender Distribution")
 
+    # Creating age groups (bins)
+    data['Age Group'] = pd.cut(data['Age'], bins=[0, 18, 30, 50, 70, 100], 
+                                labels=['0-18', '19-30', '31-50', '51-70', '71+'])
+
+    # Count the number of males and females in each age group
+    gender_age_group = data.groupby(['Age Group', 'Gender']).size().unstack().fillna(0)
+
+    # Create a figure
+    fig0 = go.Figure()
+
+    # Add bar plot for males
+    fig0.add_trace(
+        go.Bar(
+            x=gender_age_group.index,
+            y=gender_age_group['Male'],
+            name='Male',
+            marker_color='#AFEEEE'
+        )
+    )
+
+    # Add bar plot for females
+    fig0.add_trace(
+        go.Bar(
+            x=gender_age_group.index,
+            y=gender_age_group['Female'],
+            name='Female',
+            marker_color='#E6E6FA'
+        )
+    )
+
+    # Update layout to create stacked bars
+    fig0.update_layout(
+        barmode='stack',  # Stacked bar mode
+        title='Number of People by Age Group and Gender',
+        xaxis_title='Age Group',
+        yaxis_title='Number of People',
+        legend_title='Gender',
+        xaxis_tickangle=0,
+        yaxis=dict(showgrid=True)
+    )
+
+    # Show the plot in Streamlit
+    st.plotly_chart(fig0)
+    ###########
     
-   
+   ##############################################################
 
 # Placeholder for Diagnostic Analytics
 elif sidebar_option == "Diagnostic Analytics":
