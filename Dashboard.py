@@ -5,6 +5,10 @@ import numpy as np
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objs as go
+from scipy.stats import chi2_contingency
+import seaborn as sns
+
+
 
 st.set_page_config(
     page_title="OCD SEVERITY PREDICTOR"
@@ -432,4 +436,99 @@ elif sidebar_option == "Descriptive Analytics":
 # Placeholder for Diagnostic Analytics
 elif sidebar_option == "Diagnostic Analytics":
     st.markdown("<h2 style='color: turquoise;'>Diagnostic Analytics</h2>", unsafe_allow_html=True)
-    st.write("This section will be filled with diagnostic analytics.")
+    st.write("Diagnostic Analytics will help the user to identify relationships between the various features used in this dataset related to OCD symtom severity.")
+
+# Load dataset
+    df = pd.read_csv('filtered_df.csv')
+
+    st.write("""
+    ## What are Correlations?
+    Correlations measure the strength and direction of the relationship between two variables. 
+    The correlation coefficient ranges from -1 to 1:
+    - **+1** indicates a perfect positive correlation.
+    - **-1** indicates a perfect negative correlation.
+    - **0** indicates no linear correlation.
+    """)
+
+# Dropdowns for selecting the metrics
+    st.write("### Choose Metrics for Correlation")
+    metric_a = st.selectbox("Select Metric A:", ['Age', 'Duration of Symptoms (months)', 'Total_Score'])
+    metric_b = st.selectbox("Select Metric B:", ['Age', 'Duration of Symptoms (months)', 'Total_Score'])
+
+# Calculate correlation
+    if metric_a != metric_b:
+        correlation = df[metric_a].corr(df[metric_b])
+    
+    # Explanation of correlation coefficient
+        st.write(f"The correlation coefficient between **{metric_a}** and **{metric_b}** is: **{correlation:.2f}**.")
+        if correlation > 0.7:
+            st.write("This indicates a strong positive correlation.")
+        elif 0.3 < correlation <= 0.7:
+            st.write("This indicates a moderate positive correlation.")
+        elif -0.3 <= correlation <= 0.3:
+            st.write("This indicates a weak or no correlation.")
+        elif -0.7 <= correlation < -0.3:
+            st.write("This indicates a moderate negative correlation.")
+        else:
+            st.write("This indicates a strong negative correlation.")
+    
+    # Visualization using Plotly
+        fig = px.scatter(df, x=metric_a, y=metric_b, trendline="ols", title=f"Correlation between {metric_a} and {metric_b}")
+        fig.update_traces(line=dict(color='turquoise'))
+        fig.update_layout(xaxis_title=metric_a, yaxis_title=metric_b)
+        st.plotly_chart(fig)
+    else:
+        st.warning("Please choose different metrics for correlation.")
+
+    st.write("""
+    ## What are Associations?
+    Associations between variables refer to the statistical relationships or dependencies that exist between two or more variables. They help identify patterns, trends, and potential causative factors within datasets
+    """)
+
+    st.write("""
+    The Chi-square test is a statistical method used to determine whether there is a significant association between two categorical variables. It assesses how the observed frequencies in a contingency table compare to the frequencies expected under the assumption of independence.
+    """)
+
+    st.write("""
+    The p-value is the probability of obtaining a Chi-square statistic as extreme as, or more extreme than, the observed statistic, assuming that the null hypothesis is true.
+    """)
+
+    # Convert Total_Score to Score_Category
+    def assign_score_category(df):
+            df['Score_Category'] = np.where(df['Total_Score'] <= 20, 'Low', 'High')
+            return df
+
+    df = assign_score_category(df)
+
+#Select variable for heatmap
+    diagnosis_options = ['Family History of OCD', 'Anxiety Diagnosis', 'Depression Diagnosis', 'Gender']
+    selected_diagnosis = st.selectbox("Select Metric:", diagnosis_options)
+
+# Create a contingency table
+    contingency_table = pd.crosstab(df['Score_Category'], df[selected_diagnosis])
+
+# Calculate Chi-square test
+    chi2_stat, p_val, dof, expected = chi2_contingency(contingency_table)
+
+# Display Chi-square results
+    st.subheader("Chi-square Test Results")
+    st.write(f"Chi-square Statistic: {chi2_stat:.2f}")
+    st.write(f"P-value: {p_val:.4f}")
+
+# Generate a heatmap with turquoise scale
+    plt.figure(figsize=(8, 5))
+    sns.heatmap(contingency_table, annot=True, fmt='d', cmap='BuGn', cbar=True)
+    plt.title(f'Heatmap of Score_Category vs {selected_diagnosis}')
+    plt.xlabel(selected_diagnosis)
+    plt.ylabel('Score_Category')
+
+# Display the heatmap in Streamlit
+    st.pyplot(plt)
+
+# Explanation of Chi-square test results
+    if p_val < 0.05:
+        st.write("The p-value is less than 0.05, indicating a statistically significant relationship between Score_Category and", selected_diagnosis)
+        st.write("This suggests that the distribution of Score_Category is dependent on the selected diagnosis.")
+    else:
+        st.write("The p-value is greater than 0.05, indicating no statistically significant relationship between Score_Category and", selected_diagnosis)
+        st.write("This suggests that the distribution of Score_Category is independent of the selected diagnosis.")
