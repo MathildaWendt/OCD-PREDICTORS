@@ -305,7 +305,7 @@ elif sidebar_option == "Descriptive Analytics":
             x=gender_age_group.index,
             y=gender_age_group['Male'],
             name='Male',
-            marker_color='blue'
+            marker_color='#ADD8E6'
         )
     )
 
@@ -315,7 +315,7 @@ elif sidebar_option == "Descriptive Analytics":
             x=gender_age_group.index,
             y=gender_age_group['Female'],
             name='Female',
-            marker_color='pink'
+            marker_color='#FFB6C1'
         )
     )
 
@@ -334,29 +334,97 @@ elif sidebar_option == "Descriptive Analytics":
     st.plotly_chart(fig0)
     ###########
     
+#########################################################################################3
 
-    # Define the paths to the images
-    image1_path = ".//From-the-lecture/assets/1a.jpg"
-    image2_path = ".//From-the-lecture/assets/2a.jpg"
-    image3_path = ".//From-the-lecture/assets/3a.jpg"
-    image4_path = ".//From-the-lecture/assets/4a.jpg"
-    image5_path = ".//From-the-lecture/assets/5a.jpg"
-    image6_path = ".//From-the-lecture/assets/6a.jpg"
-    image7_path = ".//From-the-lecture/assets/7a.jpg"
-    image8_path = ".//From-the-lecture/assets/8a.jpg"
-    image9_path = ".//From-the-lecture/assets/9a.jpg"
-    image10_path = ".//From-the-lecture/assets/10a.jpg"
-   
-    st.image(image1_path, caption="Analytics Image 1", use_column_width=True)
-    st.image(image2_path, caption="Analytics Image 2", use_column_width=True)
-    st.image(image3_path, caption="Analytics Image 3", use_column_width=True)
-    st.image(image4_path, caption="Analytics Image 4", use_column_width=True)
-    st.image(image5_path, caption="Analytics Image 5", use_column_width=True)
-    st.image(image6_path, caption="Analytics Image 6", use_column_width=True)
-    st.image(image7_path, caption="Analytics Image 7", use_column_width=True)
-    st.image(image8_path, caption="Analytics Image 8", use_column_width=True)
-    st.image(image9_path, caption="Analytics Image 9", use_column_width=True)
-    st.image(image10_path, caption="Analytics Image 10", use_column_width=True)
+    st.markdown("<h2> Other Diagnosis in Relation to Total Score</h2>", unsafe_allow_html=True)
+
+# Filters
+    st.markdown("<h4>Select Filters below</h4>", unsafe_allow_html=True)
+
+# Create three columns for filters
+    col1, col2, col3 = st.columns(3)
+
+# Filter for Anxiety Diagnosis
+    with col1:
+        anxiety_options = ['All', 'Yes', 'No']
+        selected_anxiety = st.selectbox("Anxiety Diagnosis", anxiety_options, key="anxiety_filter")
+
+# Filter for Depression Diagnosis
+    with col2:
+        depression_options = ['All', 'Yes', 'No']
+        selected_depression = st.selectbox("Depression Diagnosis", depression_options, key="depression_filter")
+
+# Filter for Family History of OCD
+    with col3:
+        family_history_options = ['All', 'Yes', 'No']
+        selected_family_history = st.selectbox("Family History of OCD", family_history_options, key="family_history_filter")
+
+# Create a copy of the original data for filtering
+    filtered_data = data.copy()
+
+# Apply filters based on selections
+    if selected_anxiety == 'Yes':
+        filtered_data = filtered_data[filtered_data['Anxiety Diagnosis'] == True]
+    elif selected_anxiety == 'No':
+        filtered_data = filtered_data[filtered_data['Anxiety Diagnosis'] == False]
+
+    if selected_depression == 'Yes':
+        filtered_data = filtered_data[filtered_data['Depression Diagnosis'] == True]
+    elif selected_depression == 'No':
+        filtered_data = filtered_data[filtered_data['Depression Diagnosis'] == False]
+
+    if selected_family_history == 'Yes':
+        filtered_data = filtered_data[filtered_data['Family History of OCD'] == True]
+    elif selected_family_history == 'No':
+        filtered_data = filtered_data[filtered_data['Family History of OCD'] == False]
+
+# Check if the filtered data is empty
+    if filtered_data.empty:
+        st.warning("No data available for the selected filters.")
+    else:
+    # Count the number of people with and without family history of OCD
+        family_history_counts = filtered_data['Family History of OCD'].value_counts()
+
+    # Create a bar plot for the number of people with and without family history of OCD
+        bar_trace = go.Bar(
+            x=family_history_counts.index, 
+            y=family_history_counts.values, 
+            name='Number of People',
+            yaxis='y1',
+            marker_color='lightblue'
+        )
+
+    # Create a box plot for the distribution of Total_Score for each category
+        box_trace = go.Box(
+            x=filtered_data['Family History of OCD'], 
+            y=filtered_data['Total_Score'], 
+            name='Distribution of Total Score',
+            yaxis='y2',
+            marker_color='orange'
+        )
+
+    # Combine the bar and box plot using secondary y-axes
+        fig4 = go.Figure(data=[bar_trace, box_trace])
+
+    # Update layout for dual y-axes
+        fig4.update_layout(
+            title='Number of People with other Diagnosis in relation to the Total Score',
+            xaxis_title='Other Diagnosis',
+            yaxis=dict(
+                title='Number of People',
+                showgrid=False
+            ),
+            yaxis2=dict(
+                title='Distribution of Total Score',
+                overlaying='y',  # Overlay on the same plot
+                side='right'
+            ),
+            legend=dict(x=0.1, y=1.1)
+        )
+
+    # Show the figure
+        st.plotly_chart(fig4)
+
 
     
    
