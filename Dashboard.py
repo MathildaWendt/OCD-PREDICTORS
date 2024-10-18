@@ -117,8 +117,8 @@ elif sidebar_option == "Predictor":
         anxiety = st.selectbox("Does Patient have anxiety?", options=["Yes", "No"])  # Anxiety status
         age = st.number_input("Age", min_value=0, max_value=120, value=25)  # Default age
         # Obsession and Compulsive type options
-        obsession_type = st.selectbox("Obsession Type", options=["Harm-related", "Contamination", "Religious", "Hoarding", "Symmetry", "Else", "None"])
-        compulsive_type = st.selectbox("Compulsive Type", options=["Checking", "Washing", "Counting", "Ordering", "Praying", "Else", "None"])
+        obsession_type = st.selectbox("Obsession Type", options=["Harm-related", "Contamination", "Religious", "Hoarding", "Symmetry"])
+        compulsive_type = st.selectbox("Compulsive Type", options=["Checking", "Washing", "Counting", "Ordering", "Praying"])
         # Duration of symptoms in whole years (integer input)
         symptom_duration_years = st.number_input("Duration of Symptoms (in years)", min_value=0, value=0, step=1, format="%d")  # Duration input in whole years
 
@@ -146,21 +146,7 @@ elif sidebar_option == "Predictor":
 
         # If "High Symptoms", show additional details about compulsive symptoms
         if predicted_severity == "High Symptoms":
-            # Add a note about the type of symptoms (mostly compulsive)
-            st.markdown("""
-                #### Symptom Type: 
-                - **Mostly Compulsive Symptoms**  
-                (Compulsions are repetitive behaviors or mental acts that a person feels driven to perform.)
-            """)
-
-            # Optional: Add a description about what compulsive symptoms are
-            st.markdown("""
-            Compulsive symptoms often include actions like:
-            - Repeatedly checking if the door is locked
-            - Washing hands frequently
-            - Counting items
-            - Organizing things in a very specific order
-            """)
+            
 
             # Create and display an illustration of high symptoms
             def plot_high_symptoms_illustration():
@@ -186,8 +172,8 @@ elif sidebar_option == "Predictor":
                 ax.set_yticks([])
 
                 # Add a footer note
-                plt.figtext(0.5, -0.1, 'This indicates high severity of symptoms, requiring attention.', 
-                            wrap=True, horizontalalignment='center', fontsize=12, color='gray')
+                plt.figtext(0.5, -0.1, 'This indicates High Severity of Symptoms(Y-BOCS 21-40). Requiring Attention!', 
+                            wrap=True, horizontalalignment='center', fontsize=12, color='black')
 
                 return fig
 
@@ -197,13 +183,8 @@ elif sidebar_option == "Predictor":
             high_symptoms_fig = plot_high_symptoms_illustration()
             st.pyplot(high_symptoms_fig)
         elif predicted_severity == "Low Symptoms":
-            # Add a note about the type of symptoms (mostly compulsive)
-            st.markdown("""
-                #### Symptom Type: 
-                - **Mostly Obsessive Symptoms**  
-            """)
-
-            # Optional: Add a description about what compulsive symptoms are
+           
+                
             
 
             # Create and display an illustration of loe symptoms
@@ -230,7 +211,7 @@ elif sidebar_option == "Predictor":
                 ax.set_yticks([])
 
                 # Add a footer note
-                plt.figtext(0.5, -0.1, 'This indicates Low severity of symptoms, not priortitized attention.', 
+                plt.figtext(0.5, -0.1, 'This indicates Low Severity of Symptoms (Y-BOC 0-20). Not Priortitized Attention.', 
                             wrap=True, horizontalalignment='center', fontsize=12, color='gray')
 
                 return fig
