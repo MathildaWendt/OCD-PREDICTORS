@@ -266,26 +266,76 @@ elif sidebar_option == "Descriptive Analytics":
 # females
     with col4:
         st.markdown(create_stat_circle(num_females, "Females", "👩"), unsafe_allow_html=True)
+
+#####################################################################################
+
+   ##
+     # Age and Gender Distribution
+    st.markdown("## Age and Gender Distribution")
+
+    # Creating age groups (bins)
+    data['Age Group'] = pd.cut(data['Age'], bins=[0, 18, 30, 50, 70, 100], 
+                                labels=['0-18', '19-30', '31-50', '51-70', '71+'])
+
+    # Count the number of males and females in each age group
+    gender_age_group = data.groupby(['Age Group', 'Gender']).size().unstack().fillna(0)
+
+    # Create a figure
+    fig0 = go.Figure()
+
+    # Add bar plot for males
+    fig0.add_trace(
+        go.Bar(
+            x=gender_age_group.index,
+            y=gender_age_group['Male'],
+            name='Male',
+            marker_color='#AFEEEE'
+        )
+    )
+
+    # Add bar plot for females
+    fig0.add_trace(
+        go.Bar(
+            x=gender_age_group.index,
+            y=gender_age_group['Female'],
+            name='Female',
+            marker_color='#E6E6FA'
+        )
+    )
+
+    # Update layout to create stacked bars
+    fig0.update_layout(
+        barmode='stack',  # Stacked bar mode
+        title='Number of People by Age Group and Gender',
+        xaxis_title='Age Group',
+        yaxis_title='Number of People',
+        legend_title='Gender',
+        xaxis_tickangle=0,
+        yaxis=dict(showgrid=True)
+    )
+
+    # Show the plot in Streamlit
+    st.plotly_chart(fig0)
     
     
 #########################################################################################3
 
-    st.markdown("<h2> Family History of OCD in Relation to Total Score</h2>", unsafe_allow_html=True)
+    st.markdown("<h2> Diagnosis in Relation to Total Score</h2>", unsafe_allow_html=True)
 
 # Filters
-    st.markdown("<h4>Select Filters below</h4>", unsafe_allow_html=True)
+    st.markdown("<h5>Select Filters below</h5>", unsafe_allow_html=True)
 
 # Create three columns for filters
     col1, col2, col3 = st.columns(3)
 
 # Filter for Anxiety Diagnosis
     with col1:
-        anxiety_options = ['All', 'Yes', 'No']
+        anxiety_options = [ 'Yes', 'No']
         selected_anxiety = st.selectbox("Anxiety Diagnosis", anxiety_options, key="anxiety_filter")
 
 # Filter for Depression Diagnosis
     with col2:
-        depression_options = ['All', 'Yes', 'No']
+        depression_options = [ 'Yes', 'No']
         selected_depression = st.selectbox("Depression Diagnosis", depression_options, key="depression_filter")
 
 # Filter for Family History of OCD
@@ -359,54 +409,141 @@ elif sidebar_option == "Descriptive Analytics":
     # Show the figure
         st.plotly_chart(fig4)
 
-   ##
-     # Age and Gender Distribution
-    st.markdown("## Age and Gender Distribution")
 
-    # Creating age groups (bins)
-    data['Age Group'] = pd.cut(data['Age'], bins=[0, 18, 30, 50, 70, 100], 
-                                labels=['0-18', '19-30', '31-50', '51-70', '71+'])
+    #############################################################################################3
 
-    # Count the number of males and females in each age group
-    gender_age_group = data.groupby(['Age Group', 'Gender']).size().unstack().fillna(0)
 
-    # Create a figure
-    fig0 = go.Figure()
+    st.markdown("## Analysis of Type of Symptom with Total Score")
 
-    # Add bar plot for males
-    fig0.add_trace(
-        go.Bar(
-            x=gender_age_group.index,
-            y=gender_age_group['Male'],
-            name='Male',
-            marker_color='#AFEEEE'
+
+        # Selectbox for the type of analysis (Obsession or Compulsion)
+    analysis_type = st.selectbox("Choose the type of Symptom to analyze:", ["Obsession Type", "Compulsion Type"])
+
+    if analysis_type == "Obsession Type":
+        # Multiselect for filtering by specific Obsession Types
+        selected_obsessions = st.multiselect(
+            "Select Obsession Types to Filter", 
+            options=data['Obsession Type'].unique(),
+            default=data['Obsession Type'].unique()  # Default is to select all
         )
-    )
 
-    # Add bar plot for females
-    fig0.add_trace(
-        go.Bar(
-            x=gender_age_group.index,
-            y=gender_age_group['Female'],
-            name='Female',
-            marker_color='#E6E6FA'
+        # Filter the dataset based on the selected Obsession Types
+        filtered_data = data[data['Obsession Type'].isin(selected_obsessions)]
+
+        # Count and Average Score for the selected obsession types
+        obsession_counts = filtered_data['Obsession Type'].value_counts()
+        obsession_avg_scores = filtered_data.groupby('Obsession Type')['Total_Score'].mean()
+
+        # Create a figure for Obsession Type
+        fig = go.Figure()
+
+        # Add bar plot for the number of instances
+        fig.add_trace(
+            go.Bar(
+                x=obsession_counts.index,
+                y=obsession_counts.values,
+                name='Number of Instances',
+                marker_color='#AFEEEE',
+                text=obsession_counts.values,  # Show count on the bars
+                textposition='auto'
+            )
         )
-    )
 
-    # Update layout to create stacked bars
-    fig0.update_layout(
-        barmode='stack',  # Stacked bar mode
-        title='Number of People by Age Group and Gender',
-        xaxis_title='Age Group',
-        yaxis_title='Number of People',
-        legend_title='Gender',
-        xaxis_tickangle=0,
-        yaxis=dict(showgrid=True)
-    )
+        # Add line plot for the average total score
+        fig.add_trace(
+            go.Scatter(
+                x=obsession_avg_scores.index,
+                y=obsession_avg_scores.values,
+                name='Average Total Score',
+                yaxis='y2',  # Associate this with the second y-axis
+                mode='lines+markers',
+                line=dict(color='#9370DB', width=3),
+                marker=dict(size=8),
+                text=obsession_avg_scores.values,  # Show average scores on the points
+                textposition='top center'
+            )
+        )
 
-    # Show the plot in Streamlit
-    st.plotly_chart(fig0)
-    ###########
+        # Update layout to include a second y-axis
+        fig.update_layout(
+            title='Number of Instances and Average Total Score by Obsession Type',
+            xaxis_title='Obsession Type',
+            yaxis_title='Number of Instances',
+            yaxis2=dict(
+                title='Average Total Score',
+                overlaying='y',  # Overlay y-axis 2 on the same plot as y-axis 1
+                side='right'
+            ),
+            legend=dict(x=0.1, y=1.1),
+            xaxis_tickangle=45,
+            yaxis=dict(showgrid=True)
+        )
+
+        # Display the plot in Streamlit
+        st.plotly_chart(fig)
+
+    elif analysis_type == "Compulsion Type":
+        # Multiselect for filtering by specific Compulsion Types
+        selected_compulsions = st.multiselect(
+            "Select Compulsion Types to Filter", 
+            options=data['Compulsion Type'].unique(),
+            default=data['Compulsion Type'].unique()  # Default is to select all
+        )
+
+        # Filter the dataset based on the selected Compulsion Types
+        filtered_data = data[data['Compulsion Type'].isin(selected_compulsions)]
+
+        # Count and Average Score for the selected compulsion types
+        compulsion_counts = filtered_data['Compulsion Type'].value_counts()
+        compulsion_avg_scores = filtered_data.groupby('Compulsion Type')['Total_Score'].mean()
+
+        # Create a figure for Compulsion Type
+        fig = go.Figure()
+
+        # Add bar plot for the number of instances
+        fig.add_trace(
+            go.Bar(
+                x=compulsion_counts.index,
+                y=compulsion_counts.values,
+                name='Number of Instances',
+                marker_color='lightblue',
+                text=compulsion_counts.values,  # Show count on the bars
+                textposition='auto'
+            )
+        )
+
+        # Add line plot for the average total score
+        fig.add_trace(
+            go.Scatter(
+                x=compulsion_avg_scores.index,
+                y=compulsion_avg_scores.values,
+                name='Average Total Score',
+                yaxis='y2',  # Associate this with the second y-axis
+                mode='lines+markers',
+                line=dict(color='orange', width=3),
+                marker=dict(size=8),
+                text=compulsion_avg_scores.values,  # Show average scores on the points
+                textposition='top center'
+            )
+        )
+
+        # Update layout to include a second y-axis
+        fig.update_layout(
+            title='Number of Instances and Average Total Score by Compulsion Type',
+            xaxis_title='Compulsion Type',
+            yaxis_title='Number of Instances',
+            yaxis2=dict(
+                title='Average Total Score',
+                overlaying='y',  # Overlay y-axis 2 on the same plot as y-axis 1
+                side='right'
+            ),
+            legend=dict(x=0.1, y=1.1),
+            xaxis_tickangle=45,
+            yaxis=dict(showgrid=True)
+        )
+
+        # Display the plot in Streamlit
+        st.plotly_chart(fig)
     
    ##############################################################
 
