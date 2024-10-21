@@ -28,12 +28,15 @@ sidebar_option = st.sidebar.radio("Select an option", options=["About", "Predict
 
 # "About" page for project description
 if sidebar_option == "About":
-    st.markdown("<h2 style='color: turquoise;'>About the Project</h2>", unsafe_allow_html=True)
+    st.markdown("<h2 style='color: #007D79;'>Welcome to OCD Symptom Severity Prediction Dashboard</h2>", unsafe_allow_html=True)
+
+    
+    st.markdown("<h3 style='color: turquoise;'>About the Project</h3>", unsafe_allow_html=True)
     st.write("""
     
     This dashboard is designed to provide insights into the severity of OCD (Obsessive-Compulsive Disorder) symptoms according to the Y-BOCS (Yale-Brown Obsessive Compulsive Scale) scores. The Y-BOCS scores are used to assess the severity of obsessions and compulsions, to understand the impact of OCD (1).
     """)
-    st.markdown("<h2 style='color: turquoise;'>About the Dataset</h2>", unsafe_allow_html=True)
+    st.markdown("<h3 style='color: turquoise;'>About the Dataset</h3>", unsafe_allow_html=True)
     st.write("""
 
 The dataset contains clinical information about individuals diagnosed with OCD. There were initially 17 features and 1500 patients but there were instances in the dataset that had total score above 40, and individual scores for Obsessions and Compulsions above 20 each, which is not acceptable based on the scoring system of the scale. Hence, we have eliminated those and a total of 412 patients were used in creating this prediction model. 
@@ -66,7 +69,7 @@ The scores for obsession and compulsion range from 0-20 each, and the total scor
 21-40: High.
 
 """)
-    st.markdown("<h2 style='color: turquoise;'>Group Members</h2>", unsafe_allow_html=True)
+    st.markdown("<h3 style='color: turquoise;'>Group Members</h3>", unsafe_allow_html=True)
     st.write("""
 
 1.	Amanda Bashiri
@@ -76,7 +79,7 @@ The scores for obsession and compulsion range from 0-20 each, and the total scor
 5.	Sidra Jahanzeb
 6.	Ye Htut
 """)
-    st.markdown("<h2 style='color: turquoise;'>Contact Information</h2>", unsafe_allow_html=True)
+    st.markdown("<h3 style='color: turquoise;'>Contact Information</h3>", unsafe_allow_html=True)
     st.write("""
 
 1. amanda.b-14@hotmail.com
@@ -86,7 +89,7 @@ The scores for obsession and compulsion range from 0-20 each, and the total scor
 5. sid.amjed87@gmail.com
 6. dr.yehtut.1995@gmail.com
 """)
-    st.markdown("<h2 style='color: turquoise;'>Reference</h2>", unsafe_allow_html=True)
+    st.markdown("<h5 style='color: turquoise;'>Reference</h5>", unsafe_allow_html=True)
     st.write("""
 
 1.	Bejerot S, Edman G, Anckarsäter H, Berglund G, Gillberg C, Hofvander B, et al. The Brief Obsessive-Compulsive Scale (BOCS): a self-report scale for OCD and obsessive-compulsive related disorders. Nord J Psychiatry. 2014 Nov;68(8):549-59. doi: 10.3109/08039488.2014.884631.
