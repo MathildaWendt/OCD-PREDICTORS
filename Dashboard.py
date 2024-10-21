@@ -7,6 +7,7 @@ import plotly.express as px
 import plotly.graph_objs as go
 from scipy.stats import chi2_contingency
 import seaborn as sns
+import joblib
 
 
 
@@ -103,126 +104,85 @@ The scores for obsession and compulsion range from 0-20 each, and the total scor
 """)
 
 # Page for predicting new patients (renamed to "Predictor")
+# Placeholder for Predictive Analytics
 elif sidebar_option == "Predictor":
-    st.markdown(
-        "<h1 style='color: turquoise;'>OCD SYMPTOM SEVERITY PREDICTOR</h1>",
-        unsafe_allow_html=True
-    )
+    st.markdown("<h2 style='color: turquoise;'>Predictive Analytics</h2>", unsafe_allow_html=True)
+    st.write("Predictive Analytics tab will help the user to input feature values and make predictions.")
 
-    # Input Form for user details
-    st.markdown("<h2 style='color: turquoise;'>Patient Form</h2>", unsafe_allow_html=True)
+# Load the trained model (Random Forest)
+    rf_model = joblib.load('rf_model.pkl')
 
-    with st.form(key='patient_info_form'):
-        # Input fields
-        gender = st.selectbox("Gender", options=["Male", "Female", "Other"])  # Gender selection
-        family_history = st.selectbox("Family History of OCD?", options=["Yes", "No"])  # Family history
-        depression = st.selectbox("Does Patient have depression?", options=["Yes", "No"])  # Depression status
-        anxiety = st.selectbox("Does Patient have anxiety?", options=["Yes", "No"])  # Anxiety status
-        age = st.number_input("Age", min_value=0, max_value=120, value=25)  # Default age
-        # Obsession and Compulsive type options
+# Load the dataset to obtain scaling parameters
+    new_df = pd.read_csv('output_file.csv')
+
+# Features used for training and normalization
+# feature_columns = ['Age', 'Family History of OCD', 'Duration of Symptoms (months)', 'Depression Diagnosis', 
+#                    'Anxiety Diagnosis', 'Gender_Boolean', 'Obsession Type_Contamination', 
+#                    'Obsession Type_Harm-related', 'Obsession Type_Hoarding', 'Obsession Type_Religious', 
+#                    'Obsession Type_Symmetry', 'Compulsion Type_Checking', 'Compulsion Type_Counting', 
+#                    'Compulsion Type_Ordering', 'Compulsion Type_Praying', 'Compulsion Type_Washing']
+    feature_columns=list(new_df.columns)[:-1] #excluding last column which is label
+
+# Streamlit app
+    st.title("Predictive Analytics for OCD Symptom Severity")
+
+# Create form for user input
+    with st.form(key='prediction_form'):
+    # Input fields
+        age = st.number_input("Age", min_value=18, max_value=120, value=25)
+        family_history = st.selectbox("Family History of OCD?", options=["Yes", "No"])
+        symptom_duration_months = st.number_input("Duration of Symptoms (in months)", min_value=0, value=0, step=1, format="%d")
+        depression = st.selectbox("Does Patient have depression?", options=["Yes", "No"])
+        anxiety = st.selectbox("Does Patient have anxiety?", options=["Yes", "No"])
+        gender = st.selectbox("Gender", options=["Male", "Female"])
+
+    # Obsession and Compulsive type options
         obsession_type = st.selectbox("Obsession Type", options=["Harm-related", "Contamination", "Religious", "Hoarding", "Symmetry"])
         compulsive_type = st.selectbox("Compulsive Type", options=["Checking", "Washing", "Counting", "Ordering", "Praying"])
-        # Duration of symptoms in whole years (integer input)
-        symptom_duration_years = st.number_input("Duration of Symptoms (in years)", min_value=0, value=0, step=1, format="%d")  # Duration input in whole years
 
+    # Submit button
         submit_button = st.form_submit_button(label='Submit')
 
-    # Display results only after the form is submitted
+# Process user input if submit button is clicked
     if submit_button:
-        st.success("Information Submitted Successfully!")
-        st.write(f"**Gender:** {gender}")
-        st.write(f"**Family History of OCD:** {family_history}")
-        st.write(f"**Depression:** {depression}")
-        st.write(f"**Anxiety:** {anxiety}")
-        st.write(f"**Age:** {age}")
-        st.write(f"**Obsession Type:** {obsession_type}")
-        st.write(f"**Compulsive Type:** {compulsive_type}")
-        st.write(f"**Duration of Symptoms:** {symptom_duration_years} years")  # Display duration
+    # Convert inputs to match the format of new_df
+        user_data = {
+            'Age': age,
+            'Family History of OCD': 1 if family_history == 'Yes' else 0,
+            'Duration of Symptoms (months)': symptom_duration_months,
+            'Depression Diagnosis': 1 if depression == 'Yes' else 0,
+            'Anxiety Diagnosis': 1 if anxiety == 'Yes' else 0,
+            'Gender_Boolean': 1 if gender == 'Male' else 0,
+            'Obsession Type_Contamination': 1 if obsession_type == 'Contamination' else 0,
+            'Obsession Type_Harm-related': 1 if obsession_type == 'Harm-related' else 0,
+            'Obsession Type_Hoarding': 1 if obsession_type == 'Hoarding' else 0,
+            'Obsession Type_Religious': 1 if obsession_type == 'Religious' else 0,
+            'Obsession Type_Symmetry': 1 if obsession_type == 'Symmetry' else 0,
+            'Compulsion Type_Checking': 1 if compulsive_type == 'Checking' else 0,
+            'Compulsion Type_Counting': 1 if compulsive_type == 'Counting' else 0,
+            'Compulsion Type_Ordering': 1 if compulsive_type == 'Ordering' else 0,
+            'Compulsion Type_Praying': 1 if compulsive_type == 'Praying' else 0,
+            'Compulsion Type_Washing': 1 if compulsive_type == 'Washing' else 0
+        }
 
-        # Simplified severity prediction logic: Low or High Symptoms
-        if symptom_duration_years < 1:  # Example condition for low symptoms
-            predicted_severity = "Low Symptoms"
-        else:
-            predicted_severity = "High Symptoms"
+    # Convert user data to DataFrame
+        user_df = pd.DataFrame([user_data], columns=feature_columns)
 
-        st.markdown(f"### Predicted: **{predicted_severity}**")
+        scaler = joblib.load('scaler.pkl')
 
-        # If "High Symptoms", show additional details about compulsive symptoms
-        if predicted_severity == "High Symptoms":
-            
+    # Normalize user data using the same scaler
+        normalized_features = scaler.transform(user_df[["Age", "Duration of Symptoms (months)"]])
+        user_df["Age"].iloc[0]=normalized_features[0,0]
+        user_df["Duration of Symptoms (months)"].iloc[0]=normalized_features[0,1]
 
-            # Create and display an illustration of high symptoms
-            def plot_high_symptoms_illustration():
-                fig, ax = plt.subplots(figsize=(8, 4))
+        st.dataframe(user_df)
 
-                # Set a gradient background
-                ax.set_facecolor('#f2f2f2')  # Light gray background
-                ax.set_xlim(0, 100)
-
-                # Draw a red bar for high severity
-                ax.barh(['High Severity'], [100], color='red', edgecolor='black', height=0.4)
-
-                # Adding a title and centered text
-                ax.set_title('High Severity Symptoms', fontsize=20, color='black', fontweight='bold', pad=20)
-                ax.text(50, 0, 'High Symptoms', ha='center', va='center', fontsize=16, color='white', fontweight='bold')
-
-                # Adding decorative elements
-                for spine in ax.spines.values():
-                    spine.set_visible(False)  # Hide spines for cleaner look
-
-                # Remove y-ticks and x-ticks
-                ax.set_xticks([])
-                ax.set_yticks([])
-
-                # Add a footer note
-                plt.figtext(0.5, -0.1, 'This indicates High Severity of Symptoms(Y-BOCS 21-40). Requiring Attention!', 
-                            wrap=True, horizontalalignment='center', fontsize=12, color='black')
-
-                return fig
-
-
-
-            # Plot the high symptoms illustration and display it
-            high_symptoms_fig = plot_high_symptoms_illustration()
-            st.pyplot(high_symptoms_fig)
-        elif predicted_severity == "Low Symptoms":
-           
-                
-            
-
-            # Create and display an illustration of loe symptoms
-            def plot_low_symptoms_illustration():
-                fig, ax = plt.subplots(figsize=(8, 4))
-
-                # Set a gradient background
-                ax.set_facecolor('#f2f2f2')  # Light gray background
-                ax.set_xlim(0, 100)
-
-                # Draw a red bar for high severity
-                ax.barh(['Low Severity'], [100], color='green', edgecolor='black', height=0.4)
-
-                # Adding a title and centered text
-                ax.set_title('Low Severity Symptoms', fontsize=20, color='black', fontweight='bold', pad=20)
-                ax.text(50, 0, 'Low Symptoms', ha='center', va='center', fontsize=16, color='white', fontweight='bold')
-
-                # Adding decorative elements
-                for spine in ax.spines.values():
-                    spine.set_visible(False)  # Hide spines for cleaner look
-
-                # Remove y-ticks and x-ticks
-                ax.set_xticks([])
-                ax.set_yticks([])
-
-                # Add a footer note
-                plt.figtext(0.5, -0.1, 'This indicates Low Severity of Symptoms (Y-BOC 0-20). Not Priortitized Attention.', 
-                            wrap=True, horizontalalignment='center', fontsize=12, color='gray')
-
-                return fig
-
-            # Plot the high symptoms illustration and display it
-            low_symptoms_fig = plot_low_symptoms_illustration()
-            st.pyplot(low_symptoms_fig)
-
+    # Make prediction using the loaded Random Forest model
+        prediction = rf_model.predict(user_df)
+    
+    # Display the prediction result
+        prediction_label = 'Low Symptom Severity' if prediction == 0 else 'High Symptom Severity'
+        st.subheader(f"Predicted Symptom Severity: {prediction_label}")
 
 # Placeholder for Descriptive Analytics
 elif sidebar_option == "Descriptive Analytics":
@@ -324,7 +284,7 @@ elif sidebar_option == "Descriptive Analytics":
     st.plotly_chart(fig0)
 
     
-#########################################################################################3
+#########################################################################################
 
     st.markdown("""
         <div style="background-color: #F9F9F9; padding: 15px; border-radius: 5px; border: 2px solid #D3D3D3;">
