@@ -506,7 +506,7 @@ elif sidebar_option == "Descriptive Analytics":
                 x=compulsion_counts.index,
                 y=compulsion_counts.values,
                 name='Number of Instances',
-                marker_color='lightblue',
+                marker_color='#AFEEEE',
                 text=compulsion_counts.values,  # Show count on the bars
                 textposition='auto'
             )
@@ -520,7 +520,7 @@ elif sidebar_option == "Descriptive Analytics":
                 name='Average Total Score',
                 yaxis='y2',  # Associate this with the second y-axis
                 mode='lines+markers',
-                line=dict(color='orange', width=3),
+                line=dict(color='#9370DB', width=3),
                 marker=dict(size=8),
                 text=compulsion_avg_scores.values,  # Show average scores on the points
                 textposition='top center'
