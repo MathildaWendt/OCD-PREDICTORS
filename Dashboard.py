@@ -105,7 +105,7 @@ The scores for obsession and compulsion range from 0-20 each, and the total scor
 # Page for predicting new patients (renamed to "Predictor")
 elif sidebar_option == "Predictor":
     st.markdown(
-        "<h1 style='color: turquoise;'>OCD PREDICTOR</h1>",
+        "<h1 style='color: turquoise;'>OCD SYMPTOM SEVERITY PREDICTOR</h1>",
         unsafe_allow_html=True
     )
 
@@ -226,8 +226,7 @@ elif sidebar_option == "Predictor":
 
 # Placeholder for Descriptive Analytics
 elif sidebar_option == "Descriptive Analytics":
-    st.markdown("<h2 style='color: turquoise;'>Descriptive Analytics</h2>", unsafe_allow_html=True)
-    st.write("This section will be filled with descriptive analytics.")
+    st.markdown("<h1 style='color: turquoise;'>Descriptive Analytics</h1>", unsafe_allow_html=True)
 
     # Loading the dataset 
     data = pd.read_csv('filtered_df.csv')
@@ -552,7 +551,7 @@ elif sidebar_option == "Descriptive Analytics":
 
 # Placeholder for Diagnostic Analytics
 elif sidebar_option == "Diagnostic Analytics":
-    st.markdown("<h2 style='color: turquoise;'>Diagnostic Analytics</h2>", unsafe_allow_html=True)
+    st.markdown("<h1 style='color: turquoise;'>Diagnostic Analytics</h1>", unsafe_allow_html=True)
     st.write("Diagnostic Analytics will help the user to identify relationships between the various features used in this dataset related to OCD symtom severity.")
 
 # Load dataset
