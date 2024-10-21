@@ -273,7 +273,11 @@ elif sidebar_option == "Descriptive Analytics":
 
    ##
      # Age and Gender Distribution
-    st.markdown("## Age and Gender Distribution")
+    
+    st.markdown("""
+        <div style="background-color: #F9F9F9; padding: 15px; border-radius: 5px; border: 2px solid #D3D3D3;">
+            <h3 style="color: turquoise;">Age and Gender Distribution</h3>
+    """, unsafe_allow_html=True)
 
     # Creating age groups (bins)
     data['Age Group'] = pd.cut(data['Age'], bins=[0, 18, 30, 50, 70, 100], 
@@ -318,11 +322,15 @@ elif sidebar_option == "Descriptive Analytics":
 
     # Show the plot in Streamlit
     st.plotly_chart(fig0)
-    
+
     
 #########################################################################################3
 
-    st.markdown("<h2> Diagnosis in Relation to Total Score</h2>", unsafe_allow_html=True)
+    st.markdown("""
+        <div style="background-color: #F9F9F9; padding: 15px; border-radius: 5px; border: 2px solid #D3D3D3;">
+            <h3 style="color: turquoise;">Diagnosis in Relation to Total Score</h3>
+    """, unsafe_allow_html=True)
+    
 
 # Filters
     st.markdown("<h5>Select Filters below</h5>", unsafe_allow_html=True)
@@ -414,10 +422,11 @@ elif sidebar_option == "Descriptive Analytics":
 
     #############################################################################################3
 
-
-    st.markdown("## Analysis of Type of Symptom with Total Score")
-
-
+    st.markdown("""
+        <div style="background-color: #F9F9F9; padding: 15px; border-radius: 5px; border: 2px solid #D3D3D3;">
+            <h3 style="color: turquoise;">Analysis of Type of Symptom with Total Score</h3>
+    """, unsafe_allow_html=True)
+    
         # Selectbox for the type of analysis (Obsession or Compulsion)
     analysis_type = st.selectbox("Choose the type of Symptom to analyze:", ["Obsession Type", "Compulsion Type"])
 
@@ -557,8 +566,11 @@ elif sidebar_option == "Diagnostic Analytics":
 # Load dataset
     df = pd.read_csv('filtered_df.csv')
 
+    st.markdown("""
+        <div style="background-color: #F9F9F9; padding: 15px; border-radius: 5px; border: 2px solid #D3D3D3;">
+            <h2 style="color: turquoise;">What are Correlations?</h2>
+    """, unsafe_allow_html=True)
     st.write("""
-    ## What are Correlations?
     Correlations measure the strength and direction of the relationship between two variables. 
     The correlation coefficient ranges from -1 to 1:
     - **+1** indicates a perfect positive correlation.
@@ -596,8 +608,11 @@ elif sidebar_option == "Diagnostic Analytics":
     else:
         st.warning("Please choose different metrics for correlation.")
 
+    st.markdown("""
+        <div style="background-color: #F9F9F9; padding: 15px; border-radius: 5px; border: 2px solid #D3D3D3;">
+            <h2 style="color: turquoise;">What are Associations?</h2>
+    """, unsafe_allow_html=True)
     st.write("""
-    ## What are Associations?
     Associations between variables refer to the statistical relationships or dependencies that exist between two or more variables. They help identify patterns, trends, and potential causative factors within datasets
     """)
 
