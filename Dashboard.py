@@ -25,7 +25,7 @@ if os.path.exists(image_path):
 else:
     st.sidebar.write("Image file not found, please check the path.")
 
-# Navigation options in the sidebar (now with 4 options)
+# Navigation options in the sidebar
 sidebar_option = st.sidebar.radio("Select an option", options=["About", "Predictive Analytics", "Descriptive Analytics", "Diagnostic Analytics"])
 
 # "About" page for project description
@@ -172,9 +172,7 @@ elif sidebar_option == "Predictive Analytics":
     # Make prediction using the loaded Random Forest model
         prediction = rf_model.predict(user_df)
 
-        
     # Gives back the input. 
-       
         st.success("Information Submitted Successfully!")
         st.write(f"**Age:** {age}")
         st.write(f"**Family History of OCD:** {family_history}")
@@ -270,17 +268,14 @@ elif sidebar_option == "Descriptive Analytics":
 
     # Loading the dataset 
     data = pd.read_csv('filtered_df.csv')
-    ####### Patients, age, female, male####
 
-    
+    ####### Patients, age, female, male####
     average_age = round(data['Age'].mean())
     num_patients = len(data)
     num_males = data['Gender'].value_counts().get('Male', 0)
     num_females = data['Gender'].value_counts().get('Female', 0)
 
-
     col1, col2, col3, col4 = st.columns(4)
-
 
     def create_stat_circle(value, label, emoji):
        return f"""
@@ -309,9 +304,8 @@ elif sidebar_option == "Descriptive Analytics":
     with col4:
         st.markdown(create_stat_circle(num_females, "Females", "👩"), unsafe_allow_html=True)
 
-#####################################################################################
+####################
 
-   ##
      # Age and Gender Distribution
     
     st.markdown("""
@@ -360,11 +354,10 @@ elif sidebar_option == "Descriptive Analytics":
         yaxis=dict(showgrid=True)
     )
 
-    # Show the plot in Streamlit
     st.plotly_chart(fig0)
 
     
-#########################################################################################
+####################
 
     st.markdown("""
         <div style="background-color: #F9F9F9; padding: 15px; border-radius: 5px; border: 2px solid #D3D3D3;">
@@ -415,7 +408,7 @@ elif sidebar_option == "Descriptive Analytics":
     elif selected_family_history == 'No':
         filtered_data = filtered_data[filtered_data['Family History of OCD'] == False]
 
-# Check if the filtered data is empty
+    # Check if the filtered data is empty
     if filtered_data.empty:
         st.warning("No data available for the selected filters.")
     else:
@@ -463,8 +456,9 @@ elif sidebar_option == "Descriptive Analytics":
         st.plotly_chart(fig4)
 
 
-    #############################################################################################3
-
+    ###################################
+    
+    ## Analysis of type of symptom with total score##
     st.markdown("""
         <div style="background-color: #F9F9F9; padding: 15px; border-radius: 5px; border: 2px solid #D3D3D3;">
             <h3 style="color: turquoise;">Analysis of Type of Symptom with Total Score</h3>
@@ -539,7 +533,6 @@ elif sidebar_option == "Descriptive Analytics":
             yaxis=dict(showgrid=True)
         )
 
-        # Display the plot in Streamlit
         st.plotly_chart(fig)
 
     elif analysis_type == "Compulsion Type":
@@ -557,7 +550,6 @@ elif sidebar_option == "Descriptive Analytics":
         compulsion_counts = filtered_data['Compulsion Type'].value_counts()
         compulsion_avg_scores = filtered_data.groupby('Compulsion Type')['Total_Score'].mean()
 
-        # Create a figure for Compulsion Type
         fig = go.Figure()
 
         # Add bar plot for the number of instances
@@ -567,7 +559,7 @@ elif sidebar_option == "Descriptive Analytics":
                 y=compulsion_counts.values,
                 name='Number of Instances',
                 marker_color='#AFEEEE',
-                text=compulsion_counts.values,  # Show count on the bars
+                text=compulsion_counts.values,  
                 textposition='auto'
             )
         )
@@ -578,11 +570,11 @@ elif sidebar_option == "Descriptive Analytics":
                 x=compulsion_avg_scores.index,
                 y=compulsion_avg_scores.values,
                 name='Average Total Score',
-                yaxis='y2',  # Associate this with the second y-axis
+                yaxis='y2',  
                 mode='lines+markers',
                 line=dict(color='#9370DB', width=3),
                 marker=dict(size=8),
-                text=compulsion_avg_scores.values,  # Show average scores on the points
+                text=compulsion_avg_scores.values,  
                 textposition='top center'
             )
         )
@@ -605,7 +597,8 @@ elif sidebar_option == "Descriptive Analytics":
         # Display the plot in Streamlit
         st.plotly_chart(fig)
     
-   ##############################################################
+   ###############################################
+   ## Distribution of total score based on demopgrahic factors
     st.markdown("""
         <div style="background-color: #F9F9F9; padding: 15px; border-radius: 5px; border: 2px solid #D3D3D3;">
             <h3 style="color: turquoise;">Distribution of Total Score Based on Demographic Factors</h3>
@@ -640,11 +633,6 @@ elif sidebar_option == "Descriptive Analytics":
                 color_discrete_sequence=['#9370DB'])
         st.plotly_chart(fig)
 #####################################################################################
-
-
-
-
-
 
 
 # Placeholder for Diagnostic Analytics
