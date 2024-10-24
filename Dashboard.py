@@ -17,7 +17,7 @@ st.set_page_config(
 )
 
 # Sidebar configuration
-image_path = "./From-the-lecture/assets/OCD.jpeg"  # Adjust the path if needed
+image_path = "./From-the-lecture/assets/OCD.jpeg"  
 
 # Check if the image exists
 if os.path.exists(image_path):
@@ -30,8 +30,10 @@ sidebar_option = st.sidebar.radio("Select an option", options=["About", "Predict
 
 # "About" page for project description
 if sidebar_option == "About":
-    st.markdown("<h2 style='color: #007D79;'>Welcome to OCD Symptom Severity Prediction Dashboard</h2>", unsafe_allow_html=True)
-
+    st.markdown("""
+        <div style="background-color: #F9F9F9; padding: 15px; border-radius: 5px; border: 2px solid #D3D3D3;">
+            <h2 style="color: #007D79;">Welcome to OCD Symptom Severity Prediction Dashboard</h2>
+    """, unsafe_allow_html=True)
     
     st.markdown("<h3 style='color: turquoise;'>About the Project</h3>", unsafe_allow_html=True)
     st.write("""
@@ -106,7 +108,7 @@ The scores for obsession and compulsion range from 0-20 each, and the total scor
 
 # Placeholder for Predictive Analytics
 elif sidebar_option == "Predictive Analytics":
-    st.markdown("<h2 style='color: turquoise;'>Predictive Analytics</h2>", unsafe_allow_html=True)
+    st.markdown("<h1 style='color: turquoise;'>Predictive Analytics</h1>", unsafe_allow_html=True)
     st.write("On this tab, please fill in the demographic and clinical details of the patient for whom you wish to find out the predicted severity of OCD. Hit 'Submit'. The algorithm predicts whether the severity of OCD in this patient is 'High' or 'Low'. Following the prediction, you will see an explanation of the prediction.")
 
 # Load the trained model (Random Forest)
