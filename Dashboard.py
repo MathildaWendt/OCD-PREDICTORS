@@ -8,6 +8,7 @@ import plotly.graph_objs as go
 from scipy.stats import chi2_contingency
 import seaborn as sns
 import joblib
+import shap 
 
 
 
@@ -25,7 +26,7 @@ else:
     st.sidebar.write("Image file not found, please check the path.")
 
 # Navigation options in the sidebar (now with 4 options)
-sidebar_option = st.sidebar.radio("Select an option", options=["About", "Predictor", "Descriptive Analytics", "Diagnostic Analytics"])
+sidebar_option = st.sidebar.radio("Select an option", options=["About", "Predictive Analytics", "Descriptive Analytics", "Diagnostic Analytics"])
 
 # "About" page for project description
 if sidebar_option == "About":
@@ -103,11 +104,10 @@ The scores for obsession and compulsion range from 0-20 each, and the total scor
 
 """)
 
-# Page for predicting new patients (renamed to "Predictor")
 # Placeholder for Predictive Analytics
-elif sidebar_option == "Predictor":
+elif sidebar_option == "Predictive Analytics":
     st.markdown("<h2 style='color: turquoise;'>Predictive Analytics</h2>", unsafe_allow_html=True)
-    st.write("Predictive Analytics tab will help the user to input feature values and make predictions.")
+    st.write("On this tab, please fill in the demographic and clinical details of the patient for whom you wish to find out the severity of OCD. Hit 'Submit'. The algorithm predicts whether the severity of OCD in this patient is 'High' or 'Low'. Following the prediction, you will see an explanation of the prediction.")
 
 # Load the trained model (Random Forest)
     rf_model = joblib.load('rf_model.pkl')
@@ -115,16 +115,7 @@ elif sidebar_option == "Predictor":
 # Load the dataset to obtain scaling parameters
     new_df = pd.read_csv('output_file.csv')
 
-# Features used for training and normalization
-# feature_columns = ['Age', 'Family History of OCD', 'Duration of Symptoms (months)', 'Depression Diagnosis', 
-#                    'Anxiety Diagnosis', 'Gender_Boolean', 'Obsession Type_Contamination', 
-#                    'Obsession Type_Harm-related', 'Obsession Type_Hoarding', 'Obsession Type_Religious', 
-#                    'Obsession Type_Symmetry', 'Compulsion Type_Checking', 'Compulsion Type_Counting', 
-#                    'Compulsion Type_Ordering', 'Compulsion Type_Praying', 'Compulsion Type_Washing']
-    feature_columns=list(new_df.columns)[:-1] #excluding last column which is label
-
-# Streamlit app
-    st.title("Predictive Analytics for OCD Symptom Severity")
+    feature_columns=list(new_df.columns)[:-1] #exclude last column which is the label
 
 # Create form for user input
     with st.form(key='prediction_form'):
@@ -136,9 +127,9 @@ elif sidebar_option == "Predictor":
         anxiety = st.selectbox("Does Patient have anxiety?", options=["Yes", "No"])
         gender = st.selectbox("Gender", options=["Male", "Female"])
 
-    # Obsession and Compulsive type options
+    # Obsession and Compulsion type options
         obsession_type = st.selectbox("Obsession Type", options=["Harm-related", "Contamination", "Religious", "Hoarding", "Symmetry"])
-        compulsive_type = st.selectbox("Compulsive Type", options=["Checking", "Washing", "Counting", "Ordering", "Praying"])
+        compulsive_type = st.selectbox("Compulsion Type", options=["Checking", "Washing", "Counting", "Ordering", "Praying"])
 
     # Submit button
         submit_button = st.form_submit_button(label='Submit')
@@ -168,6 +159,7 @@ elif sidebar_option == "Predictor":
     # Convert user data to DataFrame
         user_df = pd.DataFrame([user_data], columns=feature_columns)
 
+    # Load scaler used for "Age" and "Duration of Symptoms (months)"
         scaler = joblib.load('scaler.pkl')
 
     # Normalize user data using the same scaler
@@ -175,14 +167,72 @@ elif sidebar_option == "Predictor":
         user_df["Age"].iloc[0]=normalized_features[0,0]
         user_df["Duration of Symptoms (months)"].iloc[0]=normalized_features[0,1]
 
-        st.dataframe(user_df)
-
     # Make prediction using the loaded Random Forest model
         prediction = rf_model.predict(user_df)
-    
+
+        st.markdown("### Predicted Severity of OCD:")
     # Display the prediction result
-        prediction_label = 'Low Symptom Severity' if prediction == 0 else 'High Symptom Severity'
-        st.subheader(f"Predicted Symptom Severity: {prediction_label}")
+        prediction_label = 'Low' if prediction == 0 else 'High'
+        if prediction_label == 'High':
+        # Display red box for High severity prediction
+            st.markdown(
+                """
+                <div style="background-color: red; padding: 20px; border-radius: 10px;">
+                    <h2 style="color: white; text-align: center;">High</h2>
+                </div>
+                """, unsafe_allow_html=True
+            )
+        else:
+        # Display green box for Low severity prediction
+            st.markdown(
+                """
+                <div style="background-color: green; padding: 20px; border-radius: 10px;">
+                    <h2 style="color: white; text-align: center;">Low</h2>
+                </div>
+                """, unsafe_allow_html=True
+            )
+
+# SHAP Explanation Section
+        st.markdown("<h2 style='color: turquoise;'>Prescriptive Analytics</h2>", unsafe_allow_html=True)
+        st.write("This section helps you understand which patient factors, like demographics and clinical details, influenced the algorithm's prediction of OCD severity. Prescriptive analytics can guide you in setting treatment goals for the patient. The analytics presented here are specific to the patient for whom you entered the above data.")
+        st.write("We have used SHAP (SHapley Additive exPlanations) to explain the output of machine learning model. It provides insights into how much each feature contributed to a specific prediction, making complex models more interpretable.")
+
+    # Create an expander for the SHAP Waterfall Plot
+        with st.expander("SHAP Waterfall Plot", expanded=False):
+
+    # Initialize the SHAP explainer
+            explainer = shap.TreeExplainer(rf_model)
+    
+    # Compute SHAP values for the user input
+            shap_values = explainer.shap_values(user_df)
+
+    # Create an Explanation object for the SHAP values
+            shap_explanation = shap.Explanation(
+            values=shap_values[0, :, int(prediction)], 
+            base_values=explainer.expected_value[int(prediction)], 
+        #data=user_df.values[0], 
+            feature_names=user_df.columns
+            )
+    
+    # Use Matplotlib to render the plot in Streamlit
+            fig, ax = plt.subplots()
+            shap.plots.waterfall(shap_explanation)  # No ax argument needed
+            st.pyplot(fig)
+
+    # Add explanatory text
+            st.markdown("""
+            *Interpreting the SHAP Waterfall Plot*            
+            *Features:* The features are listed along the vertical axis. The top features are listed in descending order of their importance, showing which features had the greatest impact on the specific prediction.
+            *SHAP Values:* The horizontal bars represent the SHAP values, indicating the impact of each feature on the prediction. Positive values push the prediction towards the predicted class, while negative values push it away from the prediction.  
+            *Base Value:* The base value, shown as a dashed line E[f(x)], represents the average model output across the training dataset. The sum of the SHAP values, when added to the base value, gives the final model output for that specific prediction denoted as f(x).
+            """)
+
+     # Detailed insights based on SHAP values
+            top_features = pd.Series(shap_explanation.values, index=shap_explanation.feature_names).sort_values(ascending=False)       # Displaying top features with explanations
+            for feature, value in top_features.items():
+                impact = "positive" if value > 0 else "negative"
+                st.write(f"- *{feature}:* {value:.3f} (This feature has a {impact} impact on the prediction.)")
+
 
 # Placeholder for Descriptive Analytics
 elif sidebar_option == "Descriptive Analytics":
