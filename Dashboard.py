@@ -170,6 +170,18 @@ elif sidebar_option == "Predictive Analytics":
     # Make prediction using the loaded Random Forest model
         prediction = rf_model.predict(user_df)
 
+        
+    # Gives back the input. 
+        st.success("Information Submitted Successfully!")
+        st.write(f"**Gender:** {gender}")
+        st.write(f"**Family History of OCD:** {family_history}")
+        st.write(f"**Depression:** {depression}")
+        st.write(f"**Anxiety:** {anxiety}")
+        st.write(f"**Age:** {age}")
+        st.write(f"**Obsession Type:** {obsession_type}")
+        st.write(f"**Compulsive Type:** {compulsive_type}")
+        st.write(f"**Duration of Symptoms:** {symptom_duration_months} months
+
         st.markdown("### Predicted Severity of OCD:")
     # Display the prediction result
         prediction_label = 'Low' if prediction == 0 else 'High'
