@@ -182,6 +182,13 @@ elif sidebar_option == "Predictive Analytics":
                 </div>
                 """, unsafe_allow_html=True
             )
+            st.markdown(
+                """
+                <p style="text-align: center; color: black; font-size: 16px;">
+                This prediction indicates high severity of symptoms. Requires attention.
+                </p>
+                """, unsafe_allow_html=True
+            )
         else:
         # Display green box for Low severity prediction
             st.markdown(
@@ -190,6 +197,13 @@ elif sidebar_option == "Predictive Analytics":
                     <h2 style="color: white; text-align: center;">Low</h2>
                 </div>
                 """, unsafe_allow_html=True
+            )
+            st.markdown(
+               """
+               <p style="text-align: center; color: black; font-size: 16px;">
+               This prediction indicates low severity of symptoms. Attention not prioritized.
+               </p>
+               """, unsafe_allow_html=True
             )
 
 # SHAP Explanation Section
