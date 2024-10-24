@@ -107,7 +107,7 @@ The scores for obsession and compulsion range from 0-20 each, and the total scor
 # Placeholder for Predictive Analytics
 elif sidebar_option == "Predictive Analytics":
     st.markdown("<h2 style='color: turquoise;'>Predictive Analytics</h2>", unsafe_allow_html=True)
-    st.write("On this tab, please fill in the demographic and clinical details of the patient for whom you wish to find out the severity of OCD. Hit 'Submit'. The algorithm predicts whether the severity of OCD in this patient is 'High' or 'Low'. Following the prediction, you will see an explanation of the prediction.")
+    st.write("On this tab, please fill in the demographic and clinical details of the patient for whom you wish to find out the predicted severity of OCD. Hit 'Submit'. The algorithm predicts whether the severity of OCD in this patient is 'High' or 'Low'. Following the prediction, you will see an explanation of the prediction.")
 
 # Load the trained model (Random Forest)
     rf_model = joblib.load('rf_model.pkl')
