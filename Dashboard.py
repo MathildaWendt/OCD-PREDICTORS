@@ -180,7 +180,7 @@ elif sidebar_option == "Predictive Analytics":
         st.write(f"**Age:** {age}")
         st.write(f"**Obsession Type:** {obsession_type}")
         st.write(f"**Compulsive Type:** {compulsive_type}")
-        st.write(f"**Duration of Symptoms:** {symptom_duration_months} months
+        st.write(f"**Duration of Symptoms:** {symptom_duration_months} months.")
 
         st.markdown("### Predicted Severity of OCD:")
     # Display the prediction result
