@@ -263,6 +263,7 @@ elif sidebar_option == "Predictive Analytics":
 # Placeholder for Descriptive Analytics
 elif sidebar_option == "Descriptive Analytics":
     st.markdown("<h1 style='color: turquoise;'>Descriptive Analytics</h1>", unsafe_allow_html=True)
+    st.write("This tab provided key summary statistic and descriptive insights about the dataset used to train the prediction model. ")
 
     # Loading the dataset 
     data = pd.read_csv('filtered_df.csv')
