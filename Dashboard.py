@@ -604,6 +604,46 @@ elif sidebar_option == "Descriptive Analytics":
         st.plotly_chart(fig)
     
    ##############################################################
+    st.markdown("""
+        <div style="background-color: #F9F9F9; padding: 15px; border-radius: 5px; border: 2px solid #D3D3D3;">
+            <h3 style="color: turquoise;">Distribution of Total Score Based on Demographic Factors</h3>
+    """, unsafe_allow_html=True)
+    
+
+    st.write("This section will allow you to view the distribution of **Total_Score** across the various age groups and gender.")
+
+# Dropdown menu for selecting demographic factor
+    option = st.selectbox(
+        'Choose a demographic factor to view the distribution:',
+        ('Age', 'Gender')
+    )
+
+# Filtered dataframe based on the selection
+    if option == 'Age':
+        filtered_data = data.copy()
+        # Box plot to show distribution based on Age Group
+        fig = px.box(filtered_data, x='Age Group', y='Total_Score',
+                title='Distribution of Total Score Across Age Groups',
+                labels={'Age Group': 'Age Group', 'Total_Score': 'Total Score'},
+                category_orders={'Age Group': ['0-18', '19-30', '31-50', '51-70', '71+']},  # Ensure proper order
+                color_discrete_sequence=['#9370DB'])
+        st.plotly_chart(fig)
+
+    elif option == 'Gender':
+        filtered_data = data.copy()
+        # Box plot to show distribution based on Gender
+        fig = px.box(filtered_data, x='Gender', y='Total_Score',
+                title='Distribution of Total Score by Gender',
+                labels={'Gender': 'Gender', 'Total_Score': 'Total Score'},
+                color_discrete_sequence=['#9370DB'])
+        st.plotly_chart(fig)
+#####################################################################################
+
+
+
+
+
+
 
 # Placeholder for Diagnostic Analytics
 elif sidebar_option == "Diagnostic Analytics":
