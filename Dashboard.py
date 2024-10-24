@@ -343,7 +343,10 @@ elif sidebar_option == "Descriptive Analytics":
     
 
 # Filters
-    st.markdown("<h5>Select Filters below</h5>", unsafe_allow_html=True)
+    st.markdown("""
+    This chart explores the relationship between **family history of OCD** and the **distribution of Total OCD Severity Scores**. 
+    Additionally, you can use the **dropdown menus above** to filter the data based on whether the patient has been diagnosed with **depression** or **anxiety**. Adjusting these filters will allow you to visualize how these conditions may effect OCD severity.
+    """)
 
 # Create three columns for filters
     col1, col2, col3 = st.columns(3)
@@ -437,6 +440,12 @@ elif sidebar_option == "Descriptive Analytics":
             <h3 style="color: turquoise;">Analysis of Type of Symptom with Total Score</h3>
     """, unsafe_allow_html=True)
     
+    st.markdown("""
+    This chart explores the relationship between the **selected symptom type** (either Obsession or Compulsion) and the **Average Total Score**.
+    
+    Use the **dropdown menu** to choose between **Obsession Types** and **Compulsion Types**, and apply filters to customize your analysis.
+    """)
+
         # Selectbox for the type of analysis (Obsession or Compulsion)
     analysis_type = st.selectbox("Choose the type of Symptom to analyze:", ["Obsession Type", "Compulsion Type"])
 
