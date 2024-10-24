@@ -41,7 +41,7 @@ if sidebar_option == "About":
     st.markdown("<h3 style='color: turquoise;'>About the Dataset</h3>", unsafe_allow_html=True)
     st.write("""
 
-The dataset contains clinical information about individuals diagnosed with OCD. There were initially 17 features and 1500 patients but there were instances in the dataset that had total score above 40, and individual scores for Obsessions and Compulsions above 20 each, which is not acceptable based on the scoring system of the scale. Hence, we have eliminated those and a total of 412 patients were used in creating this prediction model. 
+The dataset contains clinical information about individuals diagnosed with OCD. There were initially 17 features and 1500 patients but there were instances in the dataset that had total score above 40, and individual scores for Obsessions and Compulsions above 20 each, which is not acceptable based on the scoring system of the scale. Hence, we have eliminated those and a total of 419 patients were used in creating this prediction model. 
              
 The dataset includes the following features:
 
